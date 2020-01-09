@@ -1,0 +1,2 @@
+Hello this is a test for Lab0 of EECS3202!
+

@@ -19,14 +19,14 @@ do
 				if (( $first == $second ))
 				then
 					#echo "x= "$i", y= "$j", z= "$k", w= "$l
-					if ! (( $i == $k && $j == $l )) 
-					then	
-						if ! (( $i == $l && $j == $k  ))
-						then	
+					#if ! (( $i == $k && $j == $l )) 
+					#then	
+					#	if ! (( $i == $l && $j == $k  ))
+					#	then	
 						#echo $first $second
 							echo "x= "$i", y= "$j", z= "$k", w= "$l
-						fi	
-					fi 
+					#	fi	
+					#fi 
 				fi
 			done
 		done

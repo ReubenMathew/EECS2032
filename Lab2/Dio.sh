@@ -18,8 +18,15 @@ do
 				#echo $first $second
 				if (( $first == $second ))
 				then
-					#echo $first $second
-					echo "x= "$i", y= "$j", z= "$k", w= "$l
+					#echo "x= "$i", y= "$j", z= "$k", w= "$l
+					if ! (( $i == $k && $j == $l )) 
+					then	
+						if ! (( $i == $l && $j == $k  ))
+						then	
+						#echo $first $second
+							echo "x= "$i", y= "$j", z= "$k", w= "$l
+						fi	
+					fi 
 				fi
 			done
 		done

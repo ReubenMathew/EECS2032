@@ -13,7 +13,7 @@ fi
 
 if [[ ! -d $dir ]]
 then 
-	echo "$dir is not a directory" && exit 1
+	echo "$dir is not a directory"
 fi
 
 if [[ -d $2 ]]

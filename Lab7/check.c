@@ -3,35 +3,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-void eight_bit(int n){
-	int c, k;
-	for (c = 7; c >= 0; c--)
-  {
-    k = n >> c;
 
-    if (k & 1)
-      printf("1");
-    else
-      printf("0");
-  }
-
-  printf("\n");
-}
-
-void bin(int n){
-	int c, k;
-	for (c = 16; c >= 0; c--)
-  {
-    k = n >> c;
-
-    if (k & 1)
-      printf("1");
-    else
-      printf("0");
-  }
-
-  printf("\n");
-}
 
 int main(void) {
 
@@ -42,25 +14,77 @@ int main(void) {
 			exit(1);
 	}
 
-	fseek(fptr, 0, SEEK_END);
-	int size = ftell(fptr);
-	fseek(fptr,0,SEEK_SET);
-	char c[size];
+	int size;
+	char *c;
+	
 
 	// reads text until newline is encountered
-	fscanf(fptr, "%[^\n]", c);
-    fclose(fptr);
-	printf("Data from the file:\n%s\nSize: %d\n", c, size);
+	// fscanf(fptr, "%[^\n]", c);
+	// printf("Data from the file (Size: %d):\n%s\n", size, c);
+	
+	fseek( fptr , 0L , SEEK_END);
+	size = ftell( fptr );
+	rewind( fptr );
 
-	c[size] = '\n';
-    c[size+1] = '\0';
-    int k;
-	for(k = 0; k < size; k++){
-		printf("%d %c %u\n",k,c[k],c[k]);
+	/* allocate memory for entire content */
+	c = calloc( 1, size+1 );
+	if( !c ) fclose(fptr),fputs("memory alloc fails",stderr),exit(1);
+
+	/* copy the file into the buffer */
+	if( 1!=fread( c , size, 1 , fptr) )
+	  fclose(fptr),free(c),fputs("entire read fails",stderr),exit(1);
+
+	fclose(fptr);
+
+	int checksum = 0;
+	int SizeOfArray = size;
+	int even_length = SizeOfArray - SizeOfArray%2;
+
+	int x,first,second;
+	for( x = 0; x < even_length; x += 2)
+	{
+		first = (c[x] << 8) & 0xFFFF;
+		second = c[x+1] & 0xFF;
+		
+		unsigned int sum = (first+second)
+		+checksum;
+		/*
+		printf("\nRaw Sum:\n");
+		bin(sum);
+		eight_bit(first>>8);
+		eight_bit(second);
+		printf("\n");
+		*/
+		
+		if (sum > 0xFFFF){
+			// printf("Before Complement:\n");
+			// bin(sum);
+			sum=sum-0xF0000;
+			sum++;
+			sum &= 0xFFFF;
+			// printf("After Complement:\n");
+			// bin(sum);
+		}
+		
+		/*
+		printf("\nChunk: %c %c %u %u %u\n",first>>8,second,(first>>8) & 0xFF,second,sum & 0xFFFFF);
+		bin((first));
+		bin((first+second) & 0xFFFF);
+		printf("Sum: %u\n", (first) + (second) & 0xFFFF);
+		bin(sum);
+		printf("\n");
+		*/
+		checksum = sum;
+	}
+	//printf("Sum of the bytes for MyArray is: %u\n", checksum&0xFFFF);
+
+	//printf("The check integer: \n");
+	//printf("%u\n",checksum&0xFFFF);
+	if (checksum==0xFFFF){
+		printf("Valid\n");
+	}else{
+		printf("Invalid\n");
 	}
 
 	return 0;
 }
-
-//checksum needs to be 39069 for test case
-

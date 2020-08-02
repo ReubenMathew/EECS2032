@@ -13,7 +13,6 @@ int main(void) {
     float ratio = nums[1] / nums[0];
 
     int geo = TRUE;
-
     int i;
 
     for (i = 0; i < 6-1; ++i){

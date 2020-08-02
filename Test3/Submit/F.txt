@@ -1,0 +1,10 @@
+// Enable port E and make the pin as GPIO and output
+
+SIM->SCGC5 |= (0x0400)
+PORTE->PCR[pinNum] = 0x100;
+PTE->PDDR |= (1u<<(pinNum)u);
+
+//Set pin 0 of Port C and pin 5 of Port D to trigger an interrupt when reset
+//(when go from 1 to 0).
+
+
